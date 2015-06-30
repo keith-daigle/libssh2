@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     const char *username="username";
     const char *password="password";
     const char *scppath="/tmp/TEST";
-    struct stat fileinfo;
+    libssh2_struct_stat fileinfo;
     int rc;
     off_t got=0;
 
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     }
 
     /* Request a file via SCP */
-    channel = libssh2_scp_recv(session, scppath, &fileinfo);
+    channel = libssh2_scp_recv2(session, scppath, &fileinfo);
 
     if (!channel) {
         fprintf(stderr, "Unable to open a session: %d\n",

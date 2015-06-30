@@ -64,6 +64,7 @@
 #cmakedefine HAVE_SELECT
 #cmakedefine HAVE_SOCKET
 #cmakedefine HAVE_STRTOLL
+#cmakedefine HAVE_STRTOI64
 #cmakedefine HAVE_SNPRINTF
 
 /* OpenSSL functions */
@@ -76,6 +77,9 @@
 #cmakedefine HAVE_IOCTLSOCKET_CASE
 #cmakedefine HAVE_SO_NONBLOCK
 #cmakedefine HAVE_DISABLED_NONBLOCKING
+
+/* Define to 1 if you are building a Windows target with large file support. */
+#cmakedefine USE_WIN32_LARGE_FILES 1
 
 /* snprintf not in Visual Studio CRT and _snprintf dangerously incompatible.
    We provide a safe wrapper if snprintf not found */
