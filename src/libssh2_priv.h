@@ -918,6 +918,38 @@ struct _LIBSSH2_COMP_METHOD
     int (*dtor) (LIBSSH2_SESSION * session, int compress, void **abstract);
 };
 
+/*
+ * Large file (>2Gb) support using WIN32 functions.
+ */
+
+#ifdef USE_WIN32_LARGE_FILES
+#  include <io.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  undef  lseek
+#  define lseek(fdes,offset,whence)          _lseeki64(fdes, offset, whence)
+#  undef  fstat
+#  define fstat(fdes,stp)                    _fstati64(fdes, stp)
+#  undef  stat
+#  define stat(fname,stp)                    _stati64(fname, stp)
+#endif
+
+/*
+ * Small file (<2Gb) support using WIN32 functions.
+ */
+
+#ifdef USE_WIN32_SMALL_FILES
+#  include <io.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  ifndef _WIN32_WCE
+#    undef  lseek
+#    define lseek(fdes,offset,whence)          _lseek(fdes, (long)offset, whence)
+#    define fstat(fdes,stp)                    _fstat(fdes, stp)
+#    define stat(fname,stp)                    _stat(fname, stp)
+#  endif
+#endif
+
 #ifdef LIBSSH2DEBUG
 void _libssh2_debug(LIBSSH2_SESSION * session, int context, const char *format,
                     ...);

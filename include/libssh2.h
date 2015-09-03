@@ -181,16 +181,9 @@ typedef int libssh2_socket_t;
 #  include <io.h>
 #  include <sys/types.h>
 #  include <sys/stat.h>
-#  undef  lseek
-#  define lseek(fdes,offset,whence)          _lseeki64(fdes, offset, whence)
-#  undef  fstat
-#  define fstat(fdes,stp)                    _fstati64(fdes, stp)
-#  undef  stat
-#  define stat(fname,stp)                    _stati64(fname, stp)
 #  define libssh2_struct_stat                struct _stati64
 #  define libssh2_struct_stat_size           __int64
 #  define LIBSSH2_STRUCT_STAT_SIZE_FORMAT    "%I64d"
-#  define LSEEK_ERROR                        (__int64)-1
 #endif
 
 /*
@@ -198,29 +191,20 @@ typedef int libssh2_socket_t;
  */
 
 #ifdef USE_WIN32_SMALL_FILES
-#  include <io.h>
 #  include <sys/types.h>
 #  include <sys/stat.h>
 #  ifndef _WIN32_WCE
 #    undef  lseek
-#    define lseek(fdes,offset,whence)          _lseek(fdes, (long)offset, whence)
-#    define fstat(fdes,stp)                    _fstat(fdes, stp)
-#    define stat(fname,stp)                    _stat(fname, stp)
 #    define libssh2_struct_stat                struct _stat
 #    define libssh2_struct_stat_size           off_t
 #    define LIBSSH2_STRUCT_STAT_SIZE_FORMAT    "%d"
 #  endif
-#  define LSEEK_ERROR                          (long)-1
 #endif
 
 #ifndef libssh2_struct_stat
 #  define libssh2_struct_stat                  struct stat
 #  define libssh2_struct_stat_size             off_t
 #  define LIBSSH2_STRUCT_STAT_SIZE_FORMAT      "%zd"
-#endif
-
-#ifndef LSEEK_ERROR
-#  define LSEEK_ERROR (off_t)-1
 #endif
 
 /* Part of every banner, user specified or not */
